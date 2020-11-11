@@ -2,6 +2,10 @@ Invoke-WebRequest -Uri https://dl.fedoraproject.org/pub/fedora/linux/releases/33
 xz --decompress --force .\Fedora-Container-Base-33-1.2.x86_64.tar.xz
 tar tf .\Fedora-Container-Base-33-1.2.x86_64.tar | Where-Object { $_ -Like "*/layer.tar" } | ForEach-Object { tar xf .\Fedora-Container-Base-33-1.2.x86_64.tar --strip-components=1 "$_" }
 
+If (!(Test-Path -Path C:\WSL\Fedora-33 -PathType Container)) {
+	New-Item -Path C:\WSL\Fedora-33 -ItemType Directory
+}
+
 wsl --import Fedora-33 C:\WSL\Fedora-33 layer.tar
 wsl -d Fedora-33 -e sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-updates.repo
 wsl -d Fedora-33 -e sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-updates-modular.repo
