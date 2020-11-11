@@ -3,8 +3,11 @@ xz --decompress --force .\Fedora-Container-Base-33-1.2.x86_64.tar.xz
 tar tf .\Fedora-Container-Base-33-1.2.x86_64.tar | Where-Object { $_ -Like "*/layer.tar" } | ForEach-Object { tar xf .\Fedora-Container-Base-33-1.2.x86_64.tar --strip-components=1 "$_" }
 
 wsl --import Fedora-33 C:\WSL\Fedora-33 layer.tar
-wsl -d Fedora-33 -e dnf -y update
-wsl -d Fedora-33 -e dnf -y install sudo passwd
+wsl -d Fedora-33 -e sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-updates.repo
+wsl -d Fedora-33 -e sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-updates-modular.repo
+wsl -d Fedora-33 -e dnf -y install sudo passwd 'dnf-command(config-manager)'
+wsl -d Fedora-33 -e dnf config-manager --set-enabled updates --save
+wsl -d Fedora-33 -e dnf config-manager --set-enabled updates-modular --save
 
 wsl -d Fedora-33 -e bash -c "printf 'UNIX Username: ' ; read unixusername ; useradd -G wheel `$unixusername ; passwd `$unixusername"
 
