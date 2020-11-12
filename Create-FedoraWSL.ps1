@@ -15,7 +15,7 @@ If (!(Test-Path -Path "$Path" -PathType Container)) {
 wsl --import "$Distribution" "$Path" layer.tar
 wsl --distribution "$Distribution" --exec sed --in-place 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-updates.repo
 wsl --distribution "$Distribution" --exec sed --in-place 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-updates-modular.repo
-wsl --distribution "$Distribution" --exec dnf --yes install sudo passwd cracklib-dicts 'dnf-command(config-manager)'
+wsl --distribution "$Distribution" --exec dnf -y install sudo passwd cracklib-dicts 'dnf-command(config-manager)'
 wsl --distribution "$Distribution" --exec dnf config-manager --set-enabled updates --save
 wsl --distribution "$Distribution" --exec dnf config-manager --set-enabled updates-modular --save
 
