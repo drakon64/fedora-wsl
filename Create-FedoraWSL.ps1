@@ -7,11 +7,12 @@ Invoke-WebRequest -Uri https://dl.fedoraproject.org/pub/fedora/linux/releases/33
 xz --decompress --force .\Fedora-Container-Base-33-1.2.x86_64.tar.xz
 tar tf .\Fedora-Container-Base-33-1.2.x86_64.tar | Where-Object { $_ -Like "*/layer.tar" } | ForEach-Object { tar xf .\Fedora-Container-Base-33-1.2.x86_64.tar --strip-components=1 "$_" }
 
-If (!(Test-Path -Path "$Path"\"$Distribution" -PathType Container)) {
-	New-Item -Path "$Path"\"$Distribution" -ItemType Directory
+[String] $Path = $Path.FullName + $Distribution
+If (!(Test-Path -Path "$Path" -PathType Container)) {
+	New-Item -Path "$Path" -ItemType Directory
 }
 
-wsl --import "$Distribution" "$Path"\"$Distribution" layer.tar
+wsl --import "$Distribution" "$Path" layer.tar
 wsl --distribution "$Distribution" --exec sed --in-place 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-updates.repo
 wsl --distribution "$Distribution" --exec sed --in-place 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-updates-modular.repo
 wsl --distribution "$Distribution" --exec dnf --yes install sudo passwd cracklib-dicts 'dnf-command(config-manager)'
