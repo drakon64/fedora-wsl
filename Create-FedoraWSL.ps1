@@ -1,3 +1,16 @@
+<#
+.SYNOPSIS
+A script to port Fedora 33 to WSL
+.DESCRIPTION
+A simple PowerShell script to port Fedora 33 to WSL
+.PARAMETER Distribution
+What the distro will be called in WSL, by standard it will be called Fedora-33
+.PARAMETER Path
+The Path where the distribution will be installed, by default it will be C:\WSL
+.PARAMETER SetDefault
+A parameter to toggle whether it will be set to the default WSL distro
+#>
+
 Param (
 	[String] $Distribution = "Fedora-33",
 	[System.IO.DirectoryInfo] $Path = "C:\WSL\",
