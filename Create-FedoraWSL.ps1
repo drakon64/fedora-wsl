@@ -17,7 +17,7 @@ wsl --import "$Distribution" "$Path" layer.tar
 wsl --distribution "$Distribution" --exec cp --reflink=auto /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.rpmsave
 wsl --distribution "$Distribution" --exec dnf -y remove fedora-logos fedora-release fedora-release-notes
 wsl --distribution "$Distribution" --exec mv /etc/yum.repos.d/fedora.repo.rpmsave /etc/yum.repos.d/fedora.repo
-wsl --distribution "$Distribution" --exec dnf -y --releasever 33 install shadow-utils passwd cracklib-dicts sudo 'dnf-command(config-manager)' generic-logos generic-release generic-release-notes
+wsl --distribution "$Distribution" --exec dnf -y --releasever 33 install shadow-utils passwd cracklib-dicts sudo generic-logos generic-release generic-release-notes
 
 wsl --distribution "$Distribution" --exec bash -c "printf 'UNIX Username: ' ; read unixusername ; useradd -G wheel `$unixusername ; passwd `$unixusername"
 
