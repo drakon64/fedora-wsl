@@ -9,12 +9,15 @@ What the distro will be called in WSL, by standard it will be called Fedora-33
 The Path where the distribution will be installed, by default it will be C:\WSL
 .PARAMETER SetDefault
 A parameter to toggle whether it will be set to the default WSL distro
+.PARAMETER Wslu
+Install the wslu package for Windows integration
 #>
 
 Param (
 	[String] $Distribution = "Fedora-33",
 	[System.IO.DirectoryInfo] $Path = "C:\WSL\",
-	[Switch] $SetDefault
+	[Switch] $SetDefault,
+	[Switch] $Wslu
 )
 
 Invoke-WebRequest -Uri https://dl.fedoraproject.org/pub/fedora/linux/releases/33/Container/x86_64/images/Fedora-Container-Base-33-1.2.x86_64.tar.xz -OutFile Fedora-Container-Base-33-1.2.x86_64.tar.xz
@@ -48,6 +51,10 @@ wsl --distribution "$Distribution" --exec cp --reflink=auto /etc/yum.repos.d/fed
 wsl --distribution "$Distribution" --exec dnf -y remove fedora-logos fedora-release fedora-release-notes
 wsl --distribution "$Distribution" --exec mv /etc/yum.repos.d/fedora.repo.rpmsave /etc/yum.repos.d/fedora.repo
 wsl --distribution "$Distribution" --exec dnf -y --releasever 33 install shadow-utils passwd cracklib-dicts sudo generic-logos generic-release generic-release-notes
+If ($Wslu) {
+	wsl --distribution "$Distribution" --exec dnf -y copr enable wslutilities/wslu fedora-33-x86_64
+	wsl --distribution "$Distribution" --exec dnf -y install wslu
+}
 
 wsl --distribution "$Distribution" --exec bash -c "printf 'UNIX Username: ' && read unixusername && useradd -G wheel `$unixusername && passwd `$unixusername"
 
