@@ -13,3 +13,4 @@ The script has three optional parameters
 * Distribution - Allows you to define the name of the distribution that will be added to WSL
 * Path         - Change the path where the distribution will be located
 * SetDefault   - Set Fedora-33 to the default distribution in WSL
+* Wslu         - Install the `wslu` package for Windows integration
