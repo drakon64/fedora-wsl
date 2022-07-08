@@ -28,7 +28,7 @@ $File = (Invoke-WebRequest -Uri https://dl.fedoraproject.org/pub/fedora/linux/re
 
 Invoke-WebRequest -Uri https://dl.fedoraproject.org/pub/fedora/linux/releases/$ReleaseNum/Container/x86_64/images/$File -OutFile Fedora-Container-Base-$ReleaseNum.x86_64.tar.xz
 
-If (Get-Command -Name xz -CommandType Application) {
+If (Get-Command -Name xz -CommandType Application -errorAction SilentlyContinue) {
 	xz --decompress --force .\Fedora-Container-Base-$ReleaseNum.x86_64.tar.xz
 }
 Else {
@@ -65,8 +65,14 @@ If ($Wslu) {
 
 wsl --distribution "$Distribution" --exec bash -c "printf 'UNIX Username: ' && read unixusername && useradd -G wheel `$unixusername && passwd -d `$unixusername"
 
-Get-ItemProperty Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\*\ DistributionName | Where-Object -Property DistributionName -eq "$Distribution" | Set-ItemProperty -Name DefaultUid -Value 1000
+Get-ItemProperty Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\*\ | Where-Object -Property DistributionName -eq "$Distribution" | Set-ItemProperty -Name DefaultUid -Value 1000
 
 If ($SetDefault) {
 	wsl --set-default "$Distribution"
 }
+
+$ContainerBaseTar = "$PSScriptRoot" + "\Fedora-Container-Base-$ReleaseNum.x86_64.tar"
+$LayerTar = "$PSScriptRoot" + "\layer.tar"
+$ContainerBaseTar, $LayerTar | Remove-Item
+
+echo "$Distribution WSL instance created successfully!"
