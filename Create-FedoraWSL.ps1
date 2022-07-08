@@ -28,7 +28,7 @@ $File = (Invoke-WebRequest -Uri https://dl.fedoraproject.org/pub/fedora/linux/re
 
 Invoke-WebRequest -Uri https://dl.fedoraproject.org/pub/fedora/linux/releases/$ReleaseNum/Container/x86_64/images/$File -OutFile Fedora-Container-Base-$ReleaseNum.x86_64.tar.xz
 
-If (Get-Command -Name xz -CommandType Application) {
+If (Get-Command -Name xz -CommandType Application -errorAction SilentlyContinue) {
 	xz --decompress --force .\Fedora-Container-Base-$ReleaseNum.x86_64.tar.xz
 }
 Else {
