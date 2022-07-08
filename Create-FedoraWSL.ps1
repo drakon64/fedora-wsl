@@ -65,7 +65,7 @@ If ($Wslu) {
 
 wsl --distribution "$Distribution" --exec bash -c "printf 'UNIX Username: ' && read unixusername && useradd -G wheel `$unixusername && passwd -d `$unixusername"
 
-Get-ItemProperty Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\*\ DistributionName | Where-Object -Property DistributionName -eq "$Distribution" | Set-ItemProperty -Name DefaultUid -Value 1000
+Get-ItemProperty Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss\*\ | Where-Object -Property DistributionName -eq "$Distribution" | Set-ItemProperty -Name DefaultUid -Value 1000
 
 If ($SetDefault) {
 	wsl --set-default "$Distribution"
