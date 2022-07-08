@@ -70,3 +70,9 @@ Get-ItemProperty Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentV
 If ($SetDefault) {
 	wsl --set-default "$Distribution"
 }
+
+$ContainerBaseTar = "$PSScriptRoot" + "\Fedora-Container-Base-$ReleaseNum.x86_64.tar"
+$LayerTar = "$PSScriptRoot" + "\layer.tar"
+$ContainerBaseTar, $LayerTar | Remove-Item
+
+echo "$Distribution WSL instance created successfully!"
